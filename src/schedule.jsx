@@ -33,8 +33,20 @@ import { Badge } from "./components/ui/badge";
 import { normalizeComponentName } from "./lib/utils";
 
 const ProductionScheduler = () => {
-  const [selectedPlan, setSelectedPlan] = useState("72h");
-  const [completedBatches, setCompletedBatches] = useState({});
+  const [selectedPlan, setSelectedPlan] = useState(() => {
+    return localStorage.getItem('selectedPlan') || "72h";
+  });
+  
+  const [completedBatches, setCompletedBatches] = useState(() => {
+    try {
+      const saved = localStorage.getItem('completedBatches');
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      console.error('Error loading saved progress:', e);
+      return {};
+    }
+  });
+
   const [progressStats, setProgressStats] = useState({
     totalCompleted: 0,
     totalRemaining: 0,
@@ -204,120 +216,105 @@ const ProductionScheduler = () => {
       printer1: {
         name: "Mint Bottles",
         batches: [
-          { id: "p1_d1_b1", day: 1, item: "Mint Bottles", count: 24, time: 13 },
-          { id: "p1_d1_b2", day: 1, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p1_d2_b1", day: 2, item: "Mint Bottles", count: 24, time: 13 },
-          { id: "p1_d2_b2", day: 2, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p1_d3_b1", day: 3, item: "Mint Bottles", count: 24, time: 13 },
-          { id: "p1_d3_b2", day: 3, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p1_d4_b1", day: 4, item: "Mint Bottles", count: 24, time: 13 },
-          { id: "p1_d4_b2", day: 4, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p1_d5_b1", day: 5, item: "Mint Bottles", count: 24, time: 13 },
-          { id: "p1_d5_b2", day: 5, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p1_d6_b1", day: 6, item: "Mint Bottles", count: 24, time: 13 },
-          { id: "p1_d6_b2", day: 6, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p1_d7_b1", day: 7, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d1_b1_week", day: 1, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d1_b2_week", day: 1, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d2_b1_week", day: 2, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d2_b2_week", day: 2, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d3_b1_week", day: 3, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d3_b2_week", day: 3, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d4_b1_week", day: 4, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d4_b2_week", day: 4, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d5_b1_week", day: 5, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d5_b2_week", day: 5, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d6_b1_week", day: 6, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d6_b2_week", day: 6, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
         ],
       },
       printer2: {
         name: "Other Bottles",
         batches: [
-          { id: "p2_d1_b1", day: 1, item: "White Bottles", count: 24, time: 13 },
-          { id: "p2_d1_b2", day: 1, item: "White Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p2_d2_b1", day: 2, item: "White Bottles", count: 24, time: 13 },
-          { id: "p2_d2_b2", day: 2, item: "White Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p2_d3_b1", day: 3, item: "Pink Bottles", count: 24, time: 13 },
-          { id: "p2_d3_b2", day: 3, item: "Pink Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p2_d4_b1", day: 4, item: "Pink Bottles", count: 24, time: 13 },
-          { id: "p2_d4_b2", day: 4, item: "Pink Bottles", count: 13, time: 7, startHour: 13 },
-          { id: "p2_d5_b1", day: 5, item: "Purple Bottles", count: 24, time: 13 },
-          { id: "p2_d5_b2", day: 5, item: "Purple Bottles", count: 24, time: 13, startHour: 13 },
-          { id: "p2_d6_b1", day: 6, item: "Purple Bottles", count: 16, time: 8.5 },
-          { id: "p2_d6_b2", day: 6, item: "Orange Bottles", count: 24, time: 13, startHour: 8.5 },
-          { id: "p2_d7_b1", day: 7, item: "Orange Bottles", count: 10, time: 5.5 },
-          { id: "p2_d7_b2", day: 7, item: "Lime Bottles", count: 30, time: 16, startHour: 5.5 },
+          { id: "p2_d1_b1_week", day: 1, item: "White Bottles", count: 24, time: 13 },
+          { id: "p2_d1_b2_week", day: 1, item: "White Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d2_b1_week", day: 2, item: "White Bottles", count: 24, time: 13 },
+          { id: "p2_d2_b2_week", day: 2, item: "White Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d3_b1_week", day: 3, item: "Pink Bottles", count: 24, time: 13 },
+          { id: "p2_d3_b2_week", day: 3, item: "Pink Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d4_b1_week", day: 4, item: "Pink Bottles", count: 24, time: 13 },
+          { id: "p2_d4_b2_week", day: 4, item: "Pink Bottles", count: 13, time: 7, startHour: 13 },
+          { id: "p2_d4_b3_week", day: 4, item: "Purple Bottles", count: 24, time: 13, startHour: 20 },
+          { id: "p2_d5_b1_week", day: 5, item: "Purple Bottles", count: 24, time: 13 },
+          { id: "p2_d5_b2_week", day: 5, item: "Purple Bottles", count: 16, time: 8.7, startHour: 13 },
+          { id: "p2_d5_b3_week", day: 5, item: "Orange Bottles", count: 24, time: 13, startHour: 21.7 },
+          { id: "p2_d6_b1_week", day: 6, item: "Orange Bottles", count: 10, time: 5.4 },
+          { id: "p2_d6_b2_week", day: 6, item: "Lime Bottles", count: 24, time: 13, startHour: 5.4 },
+          { id: "p2_d6_b3_week", day: 6, item: "Lime Bottles", count: 6, time: 3.3, startHour: 18.4 },
         ],
       },
       printer3: {
         name: "Lids",
         batches: [
-          { id: "p3_d1_b1", day: 1, item: "Pink Lids", count: 30, time: 8 },
-          { id: "p3_d1_b2", day: 1, item: "Pink Lids", count: 30, time: 8, startHour: 8 },
-          { id: "p3_d1_b3", day: 1, item: "Pink Lids", count: 30, time: 8, startHour: 16 },
-          { id: "p3_d2_b1", day: 2, item: "Pink Lids", count: 30, time: 8 },
-          { id: "p3_d2_b2", day: 2, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
-          { id: "p3_d2_b3", day: 2, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
-          { id: "p3_d3_b1", day: 3, item: "Gray Lids", count: 30, time: 8 },
-          { id: "p3_d3_b2", day: 3, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
-          { id: "p3_d3_b3", day: 3, item: "Purple Lids", count: 30, time: 8, startHour: 16 },
-          { id: "p3_d4_b1", day: 4, item: "Purple Lids", count: 30, time: 8 },
-          { id: "p3_d4_b2", day: 4, item: "Magenta Lids", count: 30, time: 8, startHour: 8 },
-          { id: "p3_d4_b3", day: 4, item: "Magenta Lids", count: 30, time: 8, startHour: 16 },
-          { id: "p3_d5_b1", day: 5, item: "Blue Lids", count: 30, time: 8 },
-          { id: "p3_d5_b2", day: 5, item: "Magenta Lids", count: 30, time: 8, startHour: 8 },
-          { id: "p3_d5_b3", day: 5, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
-          { id: "p3_d6_b1", day: 6, item: "Blue Lids", count: 30, time: 8 },
-          { id: "p3_d6_b2", day: 6, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
-          { id: "p3_d6_b3", day: 6, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
-          { id: "p3_d7_b1", day: 7, item: "Blue Lids", count: 30, time: 8 },
+          { id: "p3_d1_b1_week", day: 1, item: "Pink Lids", count: 30, time: 8 },
+          { id: "p3_d1_b2_week", day: 1, item: "Pink Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d1_b3_week", day: 1, item: "Pink Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d2_b1_week", day: 2, item: "Pink Lids", count: 30, time: 8 },
+          { id: "p3_d2_b2_week", day: 2, item: "Pink Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d2_b3_week", day: 2, item: "Pink Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d3_b1_week", day: 3, item: "Pink Lids", count: 30, time: 8 },
+          { id: "p3_d3_b2_week", day: 3, item: "Pink Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d3_b3_week", day: 3, item: "Pink Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d4_b1_week", day: 4, item: "Pink Lids", count: 30, time: 8 },
+          { id: "p3_d4_b2_week", day: 4, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d4_b3_week", day: 4, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d5_b1_week", day: 5, item: "Gray Lids", count: 30, time: 8 },
+          { id: "p3_d5_b2_week", day: 5, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d5_b3_week", day: 5, item: "Purple Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d6_b1_week", day: 6, item: "Purple Lids", count: 30, time: 8 },
+          { id: "p3_d6_b2_week", day: 6, item: "Purple Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d6_b3_week", day: 6, item: "Magenta Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d7_b1_week", day: 7, item: "Magenta Lids", count: 30, time: 8 },
+          { id: "p3_d7_b2_week", day: 7, item: "Magenta Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d7_b3_week", day: 7, item: "Blue Lids", count: 30, time: 8, startHour: 16 },
         ],
       },
       printer4: {
         name: "Handles, Buttons & Rings",
         batches: [
           // Day 1
-          { id: "p4_d1_b1", day: 1, item: "White Handles", count: 56, time: 3 },
-          { id: "p4_d1_b2", day: 1, item: "White Handles", count: 56, time: 3, startHour: 3 },
-          { id: "p4_d1_b3", day: 1, item: "White Handles", count: 56, time: 3, startHour: 6 },
-          { id: "p4_d1_b4", day: 1, item: "Yellow Handles", count: 56, time: 3, startHour: 9 },
-          { id: "p4_d1_b5", day: 1, item: "Brown Buttons", count: 60, time: 1.5, startHour: 12 },
-          { id: "p4_d1_b6", day: 1, item: "Brown Buttons", count: 60, time: 1.5, startHour: 13.5 },
-          { id: "p4_d1_b7", day: 1, item: "Yellow Rings", count: 62, time: 0.75, startHour: 15 },
-          { id: "p4_d1_b8", day: 1, item: "Yellow Rings", count: 62, time: 0.75, startHour: 15.75 },
-          { id: "p4_d1_b9", day: 1, item: "Yellow Rings", count: 62, time: 0.75, startHour: 16.5 },
-          
+          { id: "p4_d1_b1_week", day: 1, item: "White Handles", count: 56, time: 3 },
+          { id: "p4_d1_b2_week", day: 1, item: "White Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d1_b3_week", day: 1, item: "White Handles", count: 56, time: 3, startHour: 6 },
+          { id: "p4_d1_b4_week", day: 1, item: "White Handles", count: 56, time: 3, startHour: 9 },
+          { id: "p4_d1_b5_week", day: 1, item: "White Handles", count: 56, time: 3, startHour: 12 },
+          { id: "p4_d1_b6_week", day: 1, item: "White Handles", count: 56, time: 3, startHour: 15 },
+          { id: "p4_d1_b7_week", day: 1, item: "Yellow Handles", count: 56, time: 3, startHour: 18 },
+          { id: "p4_d1_b8_week", day: 1, item: "Yellow Handles", count: 56, time: 3, startHour: 21 },
+
           // Day 2
-          { id: "p4_d2_b1", day: 2, item: "Yellow Handles", count: 56, time: 3 },
-          { id: "p4_d2_b2", day: 2, item: "Yellow Handles", count: 56, time: 3, startHour: 3 },
-          { id: "p4_d2_b3", day: 2, item: "Brown Handles", count: 56, time: 3, startHour: 6 },
-          { id: "p4_d2_b4", day: 2, item: "Black Buttons", count: 60, time: 1.5, startHour: 9 },
-          { id: "p4_d2_b5", day: 2, item: "Black Buttons", count: 60, time: 1.5, startHour: 10.5 },
-          { id: "p4_d2_b6", day: 2, item: "Black Rings", count: 62, time: 0.75, startHour: 12 },
-          { id: "p4_d2_b7", day: 2, item: "Black Rings", count: 62, time: 0.75, startHour: 12.75 },
-          
+          { id: "p4_d2_b1_week", day: 2, item: "Yellow Handles", count: 56, time: 3 },
+          { id: "p4_d2_b2_week", day: 2, item: "Brown Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d2_b3_week", day: 2, item: "Green Handles", count: 56, time: 3, startHour: 6 },
+          { id: "p4_d2_b4_week", day: 2, item: "Brown Buttons", count: 60, time: 1.5, startHour: 9 },
+          { id: "p4_d2_b5_week", day: 2, item: "Brown Buttons", count: 60, time: 1.5, startHour: 10.5 },
+          { id: "p4_d2_b6_week", day: 2, item: "Brown Buttons", count: 60, time: 1.5, startHour: 12 },
+          { id: "p4_d2_b7_week", day: 2, item: "Brown Buttons", count: 60, time: 1.5, startHour: 13.5 },
+          { id: "p4_d2_b8_week", day: 2, item: "Brown Buttons", count: 60, time: 1.5, startHour: 15 },
+          { id: "p4_d2_b9_week", day: 2, item: "Black Buttons", count: 60, time: 1.5, startHour: 16.5 },
+          { id: "p4_d2_b10_week", day: 2, item: "Black Buttons", count: 60, time: 1.5, startHour: 18 },
+          { id: "p4_d2_b11_week", day: 2, item: "Orange Buttons", count: 60, time: 1.5, startHour: 19.5 },
+          { id: "p4_d2_b12_week", day: 2, item: "Orange Buttons", count: 60, time: 1.5, startHour: 21 },
+          { id: "p4_d2_b13_week", day: 2, item: "Mint Buttons", count: 60, time: 1.5, startHour: 22.5 },
+
           // Day 3
-          { id: "p4_d3_b1", day: 3, item: "Green Handles", count: 56, time: 3 },
-          { id: "p4_d3_b2", day: 3, item: "Orange Buttons", count: 60, time: 1.5, startHour: 3 },
-          { id: "p4_d3_b3", day: 3, item: "Orange Buttons", count: 60, time: 1.5, startHour: 4.5 },
-          { id: "p4_d3_b4", day: 3, item: "Blue Rings", count: 62, time: 0.75, startHour: 6 },
-          { id: "p4_d3_b5", day: 3, item: "Blue Rings", count: 62, time: 0.75, startHour: 6.75 },
-          
-          // Day 4
-          { id: "p4_d4_b1", day: 4, item: "White Handles", count: 56, time: 3 },
-          { id: "p4_d4_b2", day: 4, item: "White Handles", count: 56, time: 3, startHour: 3 },
-          { id: "p4_d4_b3", day: 4, item: "Mint Buttons", count: 60, time: 1.5, startHour: 6 },
-          { id: "p4_d4_b4", day: 4, item: "Mint Buttons", count: 60, time: 1.5, startHour: 7.5 },
-          { id: "p4_d4_b5", day: 4, item: "Mint Rings", count: 62, time: 0.75, startHour: 9 },
-          { id: "p4_d4_b6", day: 4, item: "Mint Rings", count: 62, time: 0.75, startHour: 9.75 },
-          
-          // Day 5
-          { id: "p4_d5_b1", day: 5, item: "Yellow Handles", count: 56, time: 3 },
-          { id: "p4_d5_b2", day: 5, item: "Yellow Handles", count: 56, time: 3, startHour: 3 },
-          { id: "p4_d5_b3", day: 5, item: "Brown Buttons", count: 60, time: 1.5, startHour: 6 },
-          { id: "p4_d5_b4", day: 5, item: "White Rings", count: 62, time: 0.75, startHour: 7.5 },
-          { id: "p4_d5_b5", day: 5, item: "White Rings", count: 62, time: 0.75, startHour: 8.25 },
-          
-          // Day 6
-          { id: "p4_d6_b1", day: 6, item: "Brown Handles", count: 56, time: 3 },
-          { id: "p4_d6_b2", day: 6, item: "Brown Handles", count: 56, time: 3, startHour: 3 },
-          { id: "p4_d6_b3", day: 6, item: "Orange Buttons", count: 60, time: 1.5, startHour: 6 },
-          { id: "p4_d6_b4", day: 6, item: "Yellow Rings", count: 62, time: 0.75, startHour: 7.5 },
-          { id: "p4_d6_b5", day: 6, item: "Yellow Rings", count: 62, time: 0.75, startHour: 8.25 },
-          
-          // Day 7
-          { id: "p4_d7_b1", day: 7, item: "Green Handles", count: 56, time: 3 },
-          { id: "p4_d7_b2", day: 7, item: "White Buttons", count: 60, time: 1.5, startHour: 3 },
-          { id: "p4_d7_b3", day: 7, item: "White Rings", count: 62, time: 0.75, startHour: 4.5 },
+          { id: "p4_d3_b1_week", day: 3, item: "Yellow Rings", count: 62, time: 0.75 },
+          { id: "p4_d3_b2_week", day: 3, item: "Yellow Rings", count: 62, time: 0.75, startHour: 0.75 },
+          { id: "p4_d3_b3_week", day: 3, item: "Yellow Rings", count: 62, time: 0.75, startHour: 1.5 },
+          { id: "p4_d3_b4_week", day: 3, item: "Yellow Rings", count: 62, time: 0.75, startHour: 2.25 },
+          { id: "p4_d3_b5_week", day: 3, item: "Black Rings", count: 62, time: 0.75, startHour: 3 },
+          { id: "p4_d3_b6_week", day: 3, item: "Black Rings", count: 62, time: 0.75, startHour: 3.75 },
+          { id: "p4_d3_b7_week", day: 3, item: "Blue Rings", count: 62, time: 0.75, startHour: 4.5 },
+          { id: "p4_d3_b8_week", day: 3, item: "Blue Rings", count: 62, time: 0.75, startHour: 5.25 },
+          { id: "p4_d3_b9_week", day: 3, item: "White Rings", count: 62, time: 0.75, startHour: 6 },
+          { id: "p4_d3_b10_week", day: 3, item: "Mint Rings", count: 62, time: 0.75, startHour: 6.75 },
         ],
       },
     },
@@ -356,35 +353,38 @@ const ProductionScheduler = () => {
 
     // Process all batches
     Object.values(activeSchedule.printers).forEach((printer) => {
-      printer.batches.forEach((batch) => {
-        const isComplete = completedBatches[batch.id] || false;
-        const normalizedBatchItem = normalizeComponentName(batch.item);
-
-        if (isComplete) {
-          componentsCompleted[batch.item] = (componentsCompleted[batch.item] || 0) + batch.count;
-        } else {
-          componentsRemaining[batch.item] = (componentsRemaining[batch.item] || 0) + batch.count;
-        }
-
-        if (isComplete) {
-          // Map the completed batch to cup components
-          Object.entries(cupRequirements).forEach(([cupType, requirements]) => {
-            const batchItemLower = batch.item.toLowerCase();
-            if (batchItemLower.includes(requirements.bottle.toLowerCase())) {
-              cupsProgress[cupType].bottlesCompleted += batch.count;
-            } else if (batchItemLower.includes(requirements.lid.toLowerCase())) {
-              cupsProgress[cupType].lidsCompleted += batch.count;
-            } else if (batchItemLower.includes(requirements.button.toLowerCase())) {
-              cupsProgress[cupType].buttonsCompleted += batch.count;
-            } else if (batchItemLower.includes(requirements.ring.toLowerCase())) {
-              cupsProgress[cupType].ringsCompleted += batch.count;
-            } else if (batchItemLower.includes(requirements.handle.toLowerCase())) {
-              cupsProgress[cupType].handlesCompleted += batch.count;
+        printer.batches.forEach((batch) => {
+          const isComplete = completedBatches[batch.id] || false;
+          const itemName = batch.item;
+          const normalizedItemName = normalizeComponentName(itemName);
+          const count = batch.count;
+          
+          // Track completed and remaining components using normalized names
+          if (isComplete) {
+            componentsCompleted[itemName] = (componentsCompleted[itemName] || 0) + count;
+          } else {
+            componentsRemaining[itemName] = (componentsRemaining[itemName] || 0) + count;
+          }
+          
+          // Update cup progress based on batch type
+          Object.entries(cupsProgress).forEach(([cupType, data]) => {
+            const cup = cupRequirements[cupType];
+            
+            // Match the batch item to cup components
+            if (itemName.includes("Bottle") && itemName.includes(cup.bottle.split(" ")[0])) {
+              if (isComplete) data.bottlesCompleted += count;
+            } else if (itemName.includes("Lid") && itemName.includes(cup.lid.split(" ")[0])) {
+              if (isComplete) data.lidsCompleted += count;
+            } else if (itemName.includes("Button") && itemName.includes(cup.button.split(" ")[0])) {
+              if (isComplete) data.buttonsCompleted += count;
+            } else if (itemName.includes("Ring") && itemName.includes(cup.ring.split(" ")[0])) {
+              if (isComplete) data.ringsCompleted += count;
+            } else if (itemName.includes("Handle") && itemName.includes(cup.handle.split(" ")[0])) {
+              if (isComplete) data.handlesCompleted += count;
             }
           });
-        }
+        });
       });
-    });
 
     // Calculate completed cups for each type
     Object.entries(cupsProgress).forEach(([cupType, data]) => {
@@ -413,6 +413,23 @@ const ProductionScheduler = () => {
       cupsProgress,
     });
   }, [completedBatches, selectedPlan]); // Only depend on these two values
+
+  // Add useEffect to save state changes
+  useEffect(() => {
+    localStorage.setItem('completedBatches', JSON.stringify(completedBatches));
+  }, [completedBatches]);
+
+  useEffect(() => {
+    localStorage.setItem('selectedPlan', selectedPlan);
+  }, [selectedPlan]);
+
+  // Add reset function
+  const handleReset = () => {
+    if (window.confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+      setCompletedBatches({});
+      localStorage.removeItem('completedBatches');
+    }
+  };
 
   // Select the active schedule based on user selection
   const activeSchedule = selectedPlan === "72h" ? schedule72h : schedule1week;
@@ -520,7 +537,8 @@ const ProductionScheduler = () => {
                     return (
                       <div
                         key={batch.id}
-                        className={`p-3 rounded-md border ${
+                        onClick={() => toggleBatchCompletion(batch.id)}
+                        className={`p-3 rounded-md border cursor-pointer transition-colors duration-200 hover:border-gray-300 ${
                           isComplete
                             ? "bg-green-50 border-green-100"
                             : "bg-gray-50 border-gray-100"
@@ -535,13 +553,6 @@ const ProductionScheduler = () => {
                               <XCircle className="mr-2 h-4 w-4 text-gray-300" />
                             )}
                             {batch.item} (Qty: {batch.count})
-                          </div>
-                          <div>
-                            <Checkbox
-                              id={batch.id}
-                              checked={isComplete}
-                              onCheckedChange={() => toggleBatchCompletion(batch.id)}
-                            />
                           </div>
                         </div>
                         <div className="text-sm text-gray-500 mt-1">
@@ -566,13 +577,22 @@ const ProductionScheduler = () => {
     <div className="container mx-auto p-4">
       <Card className="mb-6">
         <CardHeader className="bg-gray-50">
-          <CardTitle className="text-xl font-bold">
-            Cup Keychain Production Tracker
-          </CardTitle>
-          <CardDescription>
-            Track your cup keychain production progress and manage your printing
-            schedule
-          </CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-xl font-bold">
+                Cup Keychain Production Tracker
+              </CardTitle>
+              <CardDescription>
+                Track your cup keychain production progress and manage your printing schedule
+              </CardDescription>
+            </div>
+            <button
+              onClick={handleReset}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+            >
+              Reset Progress
+            </button>
+          </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="72h" onValueChange={setSelectedPlan}>
@@ -878,39 +898,42 @@ const ProductionScheduler = () => {
 
 // Helper components
 const ComponentProgressList = ({ title, completed, remaining, needs }) => {
-  // Filter the components that belong to this category
-  const relevantComponents = Object.keys(needs || {});
-
-  return (
-    <Card className="border">
-      <CardHeader className="py-3">
-        <CardTitle className="text-lg">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="py-2">
-        <div className="space-y-2">
-          {relevantComponents.map((name) => {
-            const total = needs[name];
-            const completedCount = completed[name] || 0;
-            const remainingCount = remaining[name] || 0;
-            const percentComplete = total ? (completedCount / total) * 100 : 0;
-
-            return (
-              <div key={name} className="space-y-1">
-                <div className="flex justify-between text-sm">
-                  <span className="font-medium">{name}</span>
-                  <span>
-                    {completedCount} / {total}
-                  </span>
+    const relevantComponents = Object.keys(needs || {});
+  
+    return (
+      <Card className="border">
+        <CardHeader className="py-3">
+          <CardTitle className="text-lg">{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="py-2">
+          <div className="space-y-2">
+            {relevantComponents.map((name) => {
+              const total = needs[name];
+              
+              // Find the matching completed/remaining counts by checking both exact and singular forms
+              const completedCount = completed[name] || completed[name + "s"] || 0;
+              const remainingCount = remaining[name] || remaining[name + "s"] || 0;
+              
+              // Cap the progress at 100% if completed exceeds total
+              const percentComplete = Math.min(100, total ? (completedCount / total) * 100 : 0);
+  
+              return (
+                <div key={name} className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium">{name}</span>
+                    <span className={completedCount > total ? "text-green-600 font-medium" : ""}>
+                      {completedCount} / {total}
+                    </span>
+                  </div>
+                  <Progress value={percentComplete} className="h-2" />
                 </div>
-                <Progress value={percentComplete} className="h-2" />
-              </div>
-            );
-          })}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
 
 const ComponentList = ({ title, items }) => (
   <Card className="border">
