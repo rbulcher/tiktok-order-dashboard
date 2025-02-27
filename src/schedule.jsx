@@ -443,12 +443,18 @@ const ProductionScheduler = () => {
     })
   );
 
-  // Progress chart data
+  // Progress chart data with colors
   const progressData = Object.entries(progressStats.cupsProgress || {}).map(
     ([color, data]) => ({
       name: cupRequirements[color].name,
       completed: data.completed,
       remaining: data.total - data.completed,
+      color: color === 'mint' ? '#98FB98' :
+             color === 'white' ? '#E0E0E0' :
+             color === 'pink' ? '#FFB6C1' :
+             color === 'purple' ? '#DDA0DD' :
+             color === 'orange' ? '#FFA07A' :
+             color === 'lime' ? '#32CD32' : '#4CAF50'
     })
   );
 
@@ -693,7 +699,15 @@ const ProductionScheduler = () => {
                   name="Completed"
                   stackId="a"
                   fill="#4CAF50"
-                />
+                  // Use the custom color for each bar
+                  {...{
+                    fill: undefined // This removes the fixed fill
+                  }}
+                >
+                  {progressData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
                 <Bar
                   dataKey="remaining"
                   name="Remaining"
