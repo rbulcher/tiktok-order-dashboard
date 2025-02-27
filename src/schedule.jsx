@@ -201,7 +201,125 @@ const ProductionScheduler = () => {
       lime: 30,
     },
     printers: {
-      // ...similar structure as schedule72h but with more batches...
+      printer1: {
+        name: "Mint Bottles",
+        batches: [
+          { id: "p1_d1_b1", day: 1, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d1_b2", day: 1, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d2_b1", day: 2, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d2_b2", day: 2, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d3_b1", day: 3, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d3_b2", day: 3, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d4_b1", day: 4, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d4_b2", day: 4, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d5_b1", day: 5, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d5_b2", day: 5, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d6_b1", day: 6, item: "Mint Bottles", count: 24, time: 13 },
+          { id: "p1_d6_b2", day: 6, item: "Mint Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p1_d7_b1", day: 7, item: "Mint Bottles", count: 24, time: 13 },
+        ],
+      },
+      printer2: {
+        name: "Other Bottles",
+        batches: [
+          { id: "p2_d1_b1", day: 1, item: "White Bottles", count: 24, time: 13 },
+          { id: "p2_d1_b2", day: 1, item: "White Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d2_b1", day: 2, item: "White Bottles", count: 24, time: 13 },
+          { id: "p2_d2_b2", day: 2, item: "White Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d3_b1", day: 3, item: "Pink Bottles", count: 24, time: 13 },
+          { id: "p2_d3_b2", day: 3, item: "Pink Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d4_b1", day: 4, item: "Pink Bottles", count: 24, time: 13 },
+          { id: "p2_d4_b2", day: 4, item: "Pink Bottles", count: 13, time: 7, startHour: 13 },
+          { id: "p2_d5_b1", day: 5, item: "Purple Bottles", count: 24, time: 13 },
+          { id: "p2_d5_b2", day: 5, item: "Purple Bottles", count: 24, time: 13, startHour: 13 },
+          { id: "p2_d6_b1", day: 6, item: "Purple Bottles", count: 16, time: 8.5 },
+          { id: "p2_d6_b2", day: 6, item: "Orange Bottles", count: 24, time: 13, startHour: 8.5 },
+          { id: "p2_d7_b1", day: 7, item: "Orange Bottles", count: 10, time: 5.5 },
+          { id: "p2_d7_b2", day: 7, item: "Lime Bottles", count: 30, time: 16, startHour: 5.5 },
+        ],
+      },
+      printer3: {
+        name: "Lids",
+        batches: [
+          { id: "p3_d1_b1", day: 1, item: "Pink Lids", count: 30, time: 8 },
+          { id: "p3_d1_b2", day: 1, item: "Pink Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d1_b3", day: 1, item: "Pink Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d2_b1", day: 2, item: "Pink Lids", count: 30, time: 8 },
+          { id: "p3_d2_b2", day: 2, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d2_b3", day: 2, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d3_b1", day: 3, item: "Gray Lids", count: 30, time: 8 },
+          { id: "p3_d3_b2", day: 3, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d3_b3", day: 3, item: "Purple Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d4_b1", day: 4, item: "Purple Lids", count: 30, time: 8 },
+          { id: "p3_d4_b2", day: 4, item: "Magenta Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d4_b3", day: 4, item: "Magenta Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d5_b1", day: 5, item: "Blue Lids", count: 30, time: 8 },
+          { id: "p3_d5_b2", day: 5, item: "Magenta Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d5_b3", day: 5, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d6_b1", day: 6, item: "Blue Lids", count: 30, time: 8 },
+          { id: "p3_d6_b2", day: 6, item: "Gray Lids", count: 30, time: 8, startHour: 8 },
+          { id: "p3_d6_b3", day: 6, item: "Gray Lids", count: 30, time: 8, startHour: 16 },
+          { id: "p3_d7_b1", day: 7, item: "Blue Lids", count: 30, time: 8 },
+        ],
+      },
+      printer4: {
+        name: "Handles, Buttons & Rings",
+        batches: [
+          // Day 1
+          { id: "p4_d1_b1", day: 1, item: "White Handles", count: 56, time: 3 },
+          { id: "p4_d1_b2", day: 1, item: "White Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d1_b3", day: 1, item: "White Handles", count: 56, time: 3, startHour: 6 },
+          { id: "p4_d1_b4", day: 1, item: "Yellow Handles", count: 56, time: 3, startHour: 9 },
+          { id: "p4_d1_b5", day: 1, item: "Brown Buttons", count: 60, time: 1.5, startHour: 12 },
+          { id: "p4_d1_b6", day: 1, item: "Brown Buttons", count: 60, time: 1.5, startHour: 13.5 },
+          { id: "p4_d1_b7", day: 1, item: "Yellow Rings", count: 62, time: 0.75, startHour: 15 },
+          { id: "p4_d1_b8", day: 1, item: "Yellow Rings", count: 62, time: 0.75, startHour: 15.75 },
+          { id: "p4_d1_b9", day: 1, item: "Yellow Rings", count: 62, time: 0.75, startHour: 16.5 },
+          
+          // Day 2
+          { id: "p4_d2_b1", day: 2, item: "Yellow Handles", count: 56, time: 3 },
+          { id: "p4_d2_b2", day: 2, item: "Yellow Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d2_b3", day: 2, item: "Brown Handles", count: 56, time: 3, startHour: 6 },
+          { id: "p4_d2_b4", day: 2, item: "Black Buttons", count: 60, time: 1.5, startHour: 9 },
+          { id: "p4_d2_b5", day: 2, item: "Black Buttons", count: 60, time: 1.5, startHour: 10.5 },
+          { id: "p4_d2_b6", day: 2, item: "Black Rings", count: 62, time: 0.75, startHour: 12 },
+          { id: "p4_d2_b7", day: 2, item: "Black Rings", count: 62, time: 0.75, startHour: 12.75 },
+          
+          // Day 3
+          { id: "p4_d3_b1", day: 3, item: "Green Handles", count: 56, time: 3 },
+          { id: "p4_d3_b2", day: 3, item: "Orange Buttons", count: 60, time: 1.5, startHour: 3 },
+          { id: "p4_d3_b3", day: 3, item: "Orange Buttons", count: 60, time: 1.5, startHour: 4.5 },
+          { id: "p4_d3_b4", day: 3, item: "Blue Rings", count: 62, time: 0.75, startHour: 6 },
+          { id: "p4_d3_b5", day: 3, item: "Blue Rings", count: 62, time: 0.75, startHour: 6.75 },
+          
+          // Day 4
+          { id: "p4_d4_b1", day: 4, item: "White Handles", count: 56, time: 3 },
+          { id: "p4_d4_b2", day: 4, item: "White Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d4_b3", day: 4, item: "Mint Buttons", count: 60, time: 1.5, startHour: 6 },
+          { id: "p4_d4_b4", day: 4, item: "Mint Buttons", count: 60, time: 1.5, startHour: 7.5 },
+          { id: "p4_d4_b5", day: 4, item: "Mint Rings", count: 62, time: 0.75, startHour: 9 },
+          { id: "p4_d4_b6", day: 4, item: "Mint Rings", count: 62, time: 0.75, startHour: 9.75 },
+          
+          // Day 5
+          { id: "p4_d5_b1", day: 5, item: "Yellow Handles", count: 56, time: 3 },
+          { id: "p4_d5_b2", day: 5, item: "Yellow Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d5_b3", day: 5, item: "Brown Buttons", count: 60, time: 1.5, startHour: 6 },
+          { id: "p4_d5_b4", day: 5, item: "White Rings", count: 62, time: 0.75, startHour: 7.5 },
+          { id: "p4_d5_b5", day: 5, item: "White Rings", count: 62, time: 0.75, startHour: 8.25 },
+          
+          // Day 6
+          { id: "p4_d6_b1", day: 6, item: "Brown Handles", count: 56, time: 3 },
+          { id: "p4_d6_b2", day: 6, item: "Brown Handles", count: 56, time: 3, startHour: 3 },
+          { id: "p4_d6_b3", day: 6, item: "Orange Buttons", count: 60, time: 1.5, startHour: 6 },
+          { id: "p4_d6_b4", day: 6, item: "Yellow Rings", count: 62, time: 0.75, startHour: 7.5 },
+          { id: "p4_d6_b5", day: 6, item: "Yellow Rings", count: 62, time: 0.75, startHour: 8.25 },
+          
+          // Day 7
+          { id: "p4_d7_b1", day: 7, item: "Green Handles", count: 56, time: 3 },
+          { id: "p4_d7_b2", day: 7, item: "White Buttons", count: 60, time: 1.5, startHour: 3 },
+          { id: "p4_d7_b3", day: 7, item: "White Rings", count: 62, time: 0.75, startHour: 4.5 },
+        ],
+      },
     },
   };
 
