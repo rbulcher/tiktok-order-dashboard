@@ -506,6 +506,28 @@ const ProductionScheduler = () => {
 
   const componentNeeds = calculateComponentNeeds();
 
+  // Prepare pie chart data to show completion by cup color
+  const pieChartData = Object.entries(progressStats.cupsProgress || {}).map(
+    ([color, data]) => ({
+      name: cupRequirements[color].name,
+      value: data.completed,
+      color: color === 'mint' ? '#98FB98' :
+             color === 'white' ? '#E0E0E0' :
+             color === 'pink' ? '#FFB6C1' :
+             color === 'purple' ? '#DDA0DD' :
+             color === 'orange' ? '#FFA07A' :
+             color === 'lime' ? '#32CD32' : '#4CAF50'
+    })
+  ).filter(item => item.value > 0); // Only show colors that have completed cups
+
+  if (progressStats.totalRemaining > 0) {
+    pieChartData.push({
+      name: "Remaining",
+      value: progressStats.totalRemaining,
+      color: "#F5F5F5"
+    });
+  }
+
   // Function to render the daily production schedule
   const renderDailySchedule = (day) => {
     return (
@@ -637,26 +659,40 @@ const ProductionScheduler = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
-            <div className="w-64 h-64">
+            <div className="w-full h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+                <PieChart margin={{ top: 20, right: 80, bottom: 20, left: 80 }}>
                   <Pie
-                    data={completionData}
+                    data={pieChartData}
                     cx="50%"
                     cy="50%"
-                    labelLine={false}
+                    labelLine={true}
                     outerRadius={80}
-                    fill="#8884d8"
                     dataKey="value"
-                    label={({ name, percent }) =>
-                      `${name}: ${(percent * 100).toFixed(0)}%`
-                    }
+                    label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius, index }) => {
+                      const RADIAN = Math.PI / 180;
+                      const radius = outerRadius + 20;
+                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                      
+                      const textAnchor = x > cx ? 'start' : 'end';
+                      
+                      return (
+                        <text
+                          x={x}
+                          y={y}
+                          fill="#000000"
+                          textAnchor={textAnchor}
+                          dominantBaseline="middle"
+                          fontSize={12}
+                        >
+                          {`${name}: ${(percent * 100).toFixed(0)}%`}
+                        </text>
+                      );
+                    }}
                   >
-                    {completionData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={index === 0 ? "#4CAF50" : "#F5F5F5"}
-                      />
+                    {pieChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value) => [value, "Cups"]} />
